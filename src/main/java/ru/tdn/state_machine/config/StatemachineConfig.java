@@ -2,6 +2,7 @@ package ru.tdn.state_machine.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
@@ -37,8 +38,13 @@ public class StatemachineConfig extends EnumStateMachineConfigurerAdapter<States
             public void transition(Transition<States, Events> transition) {
                 log.info("MOVE from {} to {}",
                         ofNullableState(transition.getSource().getId()),
-                ofNullableState(transition.getTarget().getId()));
+                        ofNullableState(transition.getTarget().getId()));
             }
+
+            public void stateContext(StateContext<States, Events> stateContext) {
+                stateContext.getEvent();
+            }
+
             private Object ofNullableState(States s) {
                 return Optional.ofNullable(s)
                         .map(States::getId)
